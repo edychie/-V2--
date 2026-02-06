@@ -117,7 +117,7 @@ def upload_to_gas(data):
 st.set_page_config(page_title="自動閱卷系統", page_icon="📝")
 
 st.title("📝 自動閱卷小幫手")
-st.markdown("請直接將掃描好的 **PDF 考卷** 拖曳到下方，系統會自動辨識並上傳成績。")
+st.markdown("請直接將掃描好的 **PDF 考卷** 拖曳到下方，系統會自動辨識並上傳成績。記得只能傳列定位點的圖喔!")
 
 # 檔案上傳區
 uploaded_files = st.file_uploader("選擇 PDF 檔案 (可多選)", type="pdf", accept_multiple_files=True)
@@ -199,3 +199,4 @@ if uploaded_files:
                 </button>
             </a>
             """, unsafe_allow_html=True)
+
