@@ -15,11 +15,11 @@ SHEET_URL = "https://docs.google.com/spreadsheets/d/1HEtNqxYTX0pZ3wEKh_G3AS0TSq2
 # 學生資訊區
 INFO_X_OFFSET = 195
 INFO_GAP = 90
-INFO_BOX_SIZE = 35
+INFO_BOX_SIZE = 28
 
 # 三欄式題目區
 ANS_GAP = 95
-ANS_BOX_SIZE = 34
+ANS_BOX_SIZE = 28
 L_OFFSET = 195   
 M_OFFSET = 713   
 R_OFFSET = 1247  
@@ -199,4 +199,5 @@ if uploaded_files:
                 </button>
             </a>
             """, unsafe_allow_html=True)
+
 
