@@ -1,4 +1,4 @@
-﻿-*- coding: utf-8 -*-
+# ﻿-*- coding: utf-8 -*-
 import streamlit as st
 import cv2
 import numpy as np
@@ -184,3 +184,4 @@ if uploaded_files:
         status_text.text("處理完成！")
 
         st.success(f"📊 結算：成功 {success_count} 份 / 失敗 {fail_count} 份")
+
