@@ -28,7 +28,7 @@ M_OFFSET = 1018
 R_OFFSET = 1774
 
 # 判定黑度的門檻 (如果發現有填滿卻沒讀到，可調低此值，例如 180)
-PIXEL_THRESHOLD = 450
+PIXEL_THRESHOLD = 470
 
 # ==========================================
 # 🧠 核心邏輯
@@ -208,6 +208,7 @@ if uploaded_files:
 
         st.divider()
         st.link_button("📂 開啟 Google Sheet 成績表", SHEET_URL, type="primary")
+
 
 
 
