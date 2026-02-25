@@ -64,9 +64,13 @@ def process_answer_row(thresh_img, anchor, offset, gap, box_s, y_adj):
     marked_indices = [idx for idx, s in enumerate(scores) if s > PIXEL_THRESHOLD]
     options = ['A', 'B', 'C', 'D']
     
-    if len(marked_indices) == 0: return "X"
-    elif len(marked_indices) > 1: return "M"
-    else: return options[marked_indices[0]]
+    # === 🛑 修正區塊開始 ===
+    if len(marked_indices) == 0: 
+        return "" # 沒作答回傳空字串 (不要回傳 X，這樣 GAS 算分才不會出錯)
+    else: 
+        # 將所有超過門檻的選項組合成字串，例如 [0, 3] 會變成 "AD"
+        return "".join([options[i] for i in marked_indices])
+    # === 🛑 修正區塊結束 ===
 
 def analyze_paper_simple(image):
     # 強制鎖定尺寸
@@ -102,11 +106,12 @@ def analyze_paper_simple(image):
         s1 = process_info_row(thresh_inv, anchors[3], INFO_X_START, INFO_GAP, INFO_BOX_SIZE, INFO_Y_ADJ)
         s2 = process_info_row(thresh_inv, anchors[4], INFO_X_START, INFO_GAP, INFO_BOX_SIZE, INFO_Y_ADJ)
 
+        # ... (前面的程式碼不變)
         result_data = {
             "grade": str(grade),
             "class": f"{c1}{c2}",
             "seat": f"{s1}{s2}",
-            "answers": ""
+            "answers": [] # 先預設為空陣列
         }
         
         ans_list = [""] * 60
@@ -115,12 +120,15 @@ def analyze_paper_simple(image):
             ans_list[i-5+20] = process_answer_row(thresh_inv, anchors[i], M_OFFSET, ANS_GAP, ANS_BOX_SIZE, ANS_Y_ADJ)
             ans_list[i-5+40] = process_answer_row(thresh_inv, anchors[i], R_OFFSET, ANS_GAP, ANS_BOX_SIZE, ANS_Y_ADJ)
             
-        result_data["answers"] = "".join(ans_list)
+        # === 🛑 修正區塊開始 ===
+        # 不要用 "".join(ans_list)，直接把整個陣列 (List) 傳給 GAS
+        # 這樣 requests.post 發送 JSON 時，GAS 就會收到一個乾淨的陣列
+        result_data["answers"] = ans_list 
         return True, result_data
+        # === 🛑 修正區塊結束 ===
         
     except Exception as e:
         return False, f"解析錯誤: {e}"
-
 def upload_to_gas(data):
     if "script.google.com" not in GAS_URL: return True
     payload = {
@@ -189,3 +197,4 @@ if uploaded_files:
         st.divider()
         # Google Sheet 按鈕
         st.link_button("📂 開啟 Google Sheet 成績表", SHEET_URL, type="primary", use_container_width=True)
+
